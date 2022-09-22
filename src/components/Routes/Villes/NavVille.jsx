@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
-export default function NavVille({ villes }) {
+export default function NavVille() {
+  const villes=useSelector(store=>store.villes)
   const [villeSelected, changerVille] = useState(villes[0]);
   const listVille = villes.map((ville) => (
     <li className="nav-item " key={ville.nomVille}>

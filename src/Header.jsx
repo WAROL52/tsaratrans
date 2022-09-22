@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-// import React, { useContext } from "react";
-// import { AppContexte } from "./App";
+
 
 import { useState } from "react";
 import { Link } from "react-router-dom";

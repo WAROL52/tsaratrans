@@ -1,11 +1,13 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function Sprinter({voyage,setUnite}) {
+  voyage=useSelector(store=>store.voyages.find(v=>v===voyage))
     const listPlace=[]
     const placeOccuper=voyage.Passagers.map(b=>b.numeroPlace)
     for(let indexPlace=0;indexPlace<18;indexPlace++){
         let isOccuper=placeOccuper.includes(indexPlace+1)
-        listPlace.push(<Place numero={indexPlace+1} setUnite={setUnite} isOccuper={isOccuper} key={indexPlace} />)
+        listPlace.push(<Place r={()=>{}} numero={indexPlace+1} setUnite={setUnite} isOccuper={isOccuper} key={indexPlace} />)
     }
   return (
     <div

@@ -1,11 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, {  useState } from "react";
 import { useForm } from "react-hook-form";
-import { AppContexte } from "../../../App";
 import Sprinter from "../../Sprinter";
-import img from "../../../img/sprinter1.jpg";
 import Voyage from "../../../class/Voyage";
+import { useDispatch, useSelector } from "react-redux";
+import { setInfo, setVoyageSelected } from "../../../data/data";
 export default function Reserver() {
-  const { villes, voyages } = useContext(AppContexte);
+  const villes= useSelector(store=>store.villes)
+  const voyages = useSelector(store=>store.voyages)
   const { register, watch } = useForm();
   const indexVille = watch("lieuDepart", 0);
   const destination = Object.keys(villes[indexVille].destination);
@@ -98,7 +99,7 @@ function Voiture({ voyage }) {
     voyage.lieuDepart.destination[voyage.lieuDestination.nomVille].prixFrais;
   const [places, setUnite] = useState([]);
   const unite = places.length;
-  const {achat}=useContext(AppContexte)
+  const dispatch=useDispatch()
   return (
     <div className="col">
       <div className="card bg-secondary bg-opacity-25 w-100">
@@ -134,14 +135,17 @@ function Voiture({ voyage }) {
                 className="list-group-item text-bg-dark bg-opacity-100 rounded-3 shadow"
                 disabled={places.length === 0 ? true : false}
                 onClick={() => {
-                  achat.places=places
-                  achat.prix=prix
-                  achat.lieuDepart=lieuDepart.nomVille
-                  achat.lieuDestination=lieuDestination.nomVille
-                  achat.dateDepart=voyage.dateDepart
-                  achat.heureDepart=voyage.heureDepart
-                  achat.unite=unite
-                  achat.init()
+                  // dispatch(setVoyageSelected(voyage))
+                  // setUnite([])
+                  dispatch(setInfo({
+                    places,
+                    prix,
+                    lieuDepart:lieuDepart.nomVille,
+                    lieuDestination:lieuDestination.nomVille,
+                    dateDepart:voyage.dateDepart,
+                    heureDepart:voyage.heureDepart,
+                    unite,voyage
+                  }))
                 }}
                 data-bs-toggle="modal"
                 data-bs-target="#staticBackdrop"

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { configureStore, createSlice } from "@reduxjs/toolkit"
 import classSprinter from "../class/ClassSprinter.js"
 import Client from "../class/Client.js"
 import Ville from "../class/Ville.js"
@@ -33,16 +33,7 @@ const Toliara=new Ville("Toliara","Tuléar, aussi appelée Toliara, est la capit
 Toliara.ajouterDestination(Antananarivo,50_000)
 Toliara.ajouterDestination(Diego,100_000)
 
-const villes=[
-    Toamasina,
-    Antananarivo,
-    Mahanjaga,
-    Fianarantsoa,
-    Diego,
-    Antsirabe,
-    Sambava,
-    Toliara
-]
+
 const sprinter1=new classSprinter("Rakoto",18,img1,"123TBA","032 32 323 23","034 34 424 42")
 const sprinter2=new classSprinter("Rabe",18,img2,"123TYZ","032 33 363 03","034 36 924 12")
 const client1 = new Client("Rabe","Rolio","032 80 715 12")
@@ -54,48 +45,29 @@ voyage1.creerBillet(client1,5)
 voyage1.creerBillet(client1,8)
 voyage1.creerBillet(client1,10)
 voyage1.creerBillet(client1,15)
-const clients=[
-    client1
-]
-const voyages=[
-    voyage1,
-    voyage2,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-    voyage1,
-]
-const data={
-    villes,clients,voyages,
-    achat:{
+const clients=createSlice({
+    name:"clients",
+    initialState:[
+        client1
+    ],
+    reducers:{}
+})
+const voyages=createSlice({
+    name:"voyages",
+    initialState:[
+        voyage1,
+        voyage2
+    ],
+    reducers:{
+        updateVoyage:(c,{payload})=>{
+            payload()
+            return c
+        }
+    }
+})
+const achats=createSlice({
+    name:"achats",
+    initialState:{
         places:[],
         prix:0,
         lieuDepart:'',
@@ -104,10 +76,52 @@ const data={
         heureDepart:'',
         unite:0,
         voyage:null
+    },
+    reducers:{
+        setInfo(achat,{payload}){
+            Object.assign(achat,payload)
+            // console.log(payload);
+            // console.log({...achat});
+            // achat.unite=12
+            return achat
+        }
     }
+})
+const villes=createSlice({
+    name:"villes",
+    initialState:[
+        Toamasina,
+        Antananarivo,
+        Mahanjaga,
+        Fianarantsoa,
+        Diego,
+        Antsirabe,
+        Sambava,
+        Toliara
+    ],
+    reducers:{}
+})
+const voyageSelected=createSlice({
+    name:"voyageSelected",
+    initialState:null,
+    reducers:{
+        setVoyageSelected:(_,{payload})=>payload
+    }
+})
+const STORE=configureStore({
+    reducer:{
+        voyages:voyages.reducer,
+        clients:clients.reducer,
+        achats:achats.reducer,
+        villes:villes.reducer,
+        voyageSelected:voyageSelected.reducer
+    },
+    middleware:(fn)=>fn({serializableCheck:false})
+})
+const {setInfo}=achats.actions
+const {setVoyageSelected}=voyageSelected.actions
+const {updateVoyage}=voyages.actions
+export {
+    STORE,setInfo,setVoyageSelected,updateVoyage
 }
 
-console.log(data);
-export {
-    data
-}

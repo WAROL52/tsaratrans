@@ -1,24 +1,21 @@
-import React, { useContext, useRef, useState } from "react";
-import { AppContexte } from "../App";
 import Cleave from "cleave.js/react";
-import { useForm } from "react-hook-form";
-import { Toast } from "bootstrap"
 import Client from "../class/Client";
+import { useDispatch, useSelector } from "react-redux";
+import { updateVoyage } from "../data/data";
 
 export default function Achat() {
-  const { achat,update } = useContext(AppContexte);
-  const [, init] = useState(Math.random());
+  const achats= useSelector(store=>store.achats)
   let nom = "";
 
   let prenom = "";
   let tel = "";
-  achat.init = () => init(Math.random());
-  console.log("init", achat);
+  const d=useDispatch()
   function save() {
     const client=new Client(nom,prenom,tel)
-    achat.places.map(place=>achat.voyage.creerBillet(client,place))
-    alert("Achat Effectué...");
-    update()
+  
+    console.log(achats);
+    console.log("Achat Effectué...")
+    d(updateVoyage(()=>achats.places.map(place=>achats.voyage.creerBillet(client,place))))
   }
   return (
     <div
@@ -45,9 +42,9 @@ export default function Achat() {
           </div>
           <div className="modal-body">
             <div className="">
-                <h6>{achat.lieuDepart} -- {achat.lieuDestination}</h6>
-                places selectionné : {achat.places.sort((a,b)=>a-b).join(", ")} <br />
-                Montant Total : {achat.prix*achat.unite} Ar
+                <h6>{achats.lieuDepart} -- {achats.lieuDestination}</h6>
+                places selectionné : {achats.places.slice().sort((a,b)=>a-b).join(', ')} <br />
+                Montant Total : {achats.prix*achats.unite} Ar
             </div>
             <div className="input-group">
               <span className="input-group-text">Nom et Prenom {nom} </span>
@@ -74,7 +71,7 @@ export default function Achat() {
                 options={{
                   prefix: 0,
                   blocks: [1, 2, 2, 3, 2],
-                  // numeral:true,
+                  numeral:true,
                   numericOnly: true,
                 }}
                 type="text"
