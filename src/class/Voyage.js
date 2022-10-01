@@ -15,8 +15,10 @@ export default class Voyage{
     }
     #passagers=[]
     get Passagers(){return this.#passagers}
+    places=[]
     creerBillet(client,numeroDePlace){
         if(!(client instanceof Client)) throw new Error("client doit etre instance de Client")
+        if(this.places.includes(numeroDePlace)) return ;
         const billet=new Billet(client,this.dateDepart,this.lieuDepart,this.lieuDestination,numeroDePlace)
         this.ajouterPassagers(billet)
         return billet

@@ -1,7 +1,7 @@
 import Cleave from "cleave.js/react";
 import Client from "../class/Client";
 import { useDispatch, useSelector } from "react-redux";
-import { updateVoyage } from "../data/data";
+import { setInfo } from "../data/data";
 
 export default function Achat() {
   const achats= useSelector(store=>store.achats)
@@ -12,10 +12,18 @@ export default function Achat() {
   const d=useDispatch()
   function save() {
     const client=new Client(nom,prenom,tel)
-  
-    console.log(achats);
-    console.log("Achat Effectué...")
-    d(updateVoyage(()=>achats.places.map(place=>achats.voyage.creerBillet(client,place))))
+    achats.places.map(place=>achats.voyage.creerBillet(client,place))
+    d(setInfo({
+      places: [],
+      prix: 0,
+      lieuDepart: '',
+      lieuDestination: '',
+      dateDepart: '',
+      heureDepart: '',
+      unite: 0,
+      voyage: null
+  }))
+  achats.setPlace([])
   }
   return (
     <div
